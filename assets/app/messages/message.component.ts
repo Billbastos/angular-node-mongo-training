@@ -30,7 +30,9 @@ export class MessageComponent {
   }
 
   onDelete() {
-    this.messageService.deteleMessage(this.message);
+    this.messageService.deteleMessage(this.message).subscribe(
+      result => console.log(result)
+    );
   }
 
 }

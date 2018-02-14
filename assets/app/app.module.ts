@@ -14,6 +14,7 @@ import { MessageComponent } from './messages/message.component';
 import { MessagesComponent } from './messages/messages.component';
 import { routing } from './app.routing' ;
 import { SignupComponent } from './auth/signup.component';
+import { AuthService } from './auth/auth.service';
 
 @NgModule({
     declarations: [ // All components / directives / pipes
@@ -33,6 +34,7 @@ import { SignupComponent } from './auth/signup.component';
                 routing, 
                 ReactiveFormsModule,
                 HttpModule ], // services injected other modules
+    providers: [ AuthService],
     bootstrap: [ AppComponent ]
 })
 export class AppModule {

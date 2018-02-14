@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { AuthService } from './auth.service';
+import { User } from './user.model';
 
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html'
 })
 export class SigninComponent {
+
+  constructor(private authService: AuthService) {}
+
   ngOnInit(): void {
     this.myForm = new FormGroup({
       email: new FormControl(null, [
         Validators.required,
-        Validators.pattern("^[a-z]{1,10}(\.[a-z]{1,10})?@+[a-z]+\.[a-z]{2,3}(\.[a-z]{2,3})?$")
+        Validators.pattern("^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$")
       ]),
       password: new FormControl(null, Validators.required),
     });

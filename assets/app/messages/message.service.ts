@@ -51,6 +51,12 @@ export class MessageService {
   }
 
   deteleMessage(message: Message) {
-    this.messages.splice(this.messages.indexOf(message), 1);
+    
+    return this.http.delete('http://localhost:3000/message/'+ message.messageId)
+        .map((response: Response)=> {
+          this.messages.splice(this.messages.indexOf(message), 1);
+          return response.json();
+        })
+        .catch((error: Response)=> Observable.throw(error));
   }
 }
