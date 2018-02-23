@@ -1,7 +1,8 @@
 var express = require('express');
+var jwt = require('jsonwebtoken');
 var router = express.Router();
-
-var Message = require('../models/message'); // Mongoose Obj
+var User = require('../models/user'); // Mongoose User Obj
+var Message = require('../models/message'); // Mongoose Message Obj
 
 /* Fetch Data from Mongo through Mongoose find method */
 router.get('/', function(req, res, next) {
@@ -20,23 +21,50 @@ router.get('/', function(req, res, next) {
     })
 });
 
+/* Filter for all requests to check authenticated users*/
+router.use('/', function(req, res, next){
+  // Verify is token is valid
+  jwt.verify(req.query.token, 'secret', function(err, decoded){
+    if(err) {
+      return res.status(401).json({
+        title: 'Not Authorized',
+        error: err
+      })
+    }
+    next(); // Continue the request journey
+  })
+});
+
 /* Add data in MongoDB through Mongoose save method */
 router.post('/', function (req, res, next){
-    var message = new Message({
-      content: req.body.content
-    }) 
-    message.save(function(err, result) {
+    var decoded = jwt.decode(req.query.token);
+    User.findById(decoded.user._id, function(err, user){
       if(err) {
         return res.status(500).json({
           title: 'An error occurred',
           error: err
         });
       }
-      res.status(201).json({
-        message: 'Saved Message',
-        obj: result
-      })
-    });
+      var message = new Message({
+        content: req.body.content,
+        user: user._id // Adding user to the message 
+      }) 
+      message.save(function(err, result) {
+        if(err) {
+          return res.status(500).json({
+            title: 'An error occurred',
+            error: err
+          });
+        }
+        user.messages.push(result._id); // Adding message to the users array
+        user.save();
+        res.status(201).json({
+          message: 'Saved Message',
+          obj: result
+        })
+      });
+    })
+    
 });
 
 /* update just the field changed 'content' from message */
