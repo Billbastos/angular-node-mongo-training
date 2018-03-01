@@ -7,6 +7,7 @@ var Message = require('../models/message'); // Mongoose Message Obj
 /* Fetch Data from Mongo through Mongoose find method */
 router.get('/', function(req, res, next) {
   Message.find()
+  .populate('user', 'firstName') // Populates obj `message` with user.firstName on it.
     .exec(function(err, messages){
       if(err) {
         return res.status(500).json({
@@ -27,7 +28,7 @@ router.use('/', function(req, res, next){
   jwt.verify(req.query.token, 'secret', function(err, decoded){
     if(err) {
       return res.status(401).json({
-        title: 'Not Authorized',
+        title: 'Not Authenticated',
         error: err
       })
     }
@@ -37,7 +38,7 @@ router.use('/', function(req, res, next){
 
 /* Add data in MongoDB through Mongoose save method */
 router.post('/', function (req, res, next){
-    var decoded = jwt.decode(req.query.token);
+    var decoded = jwt.decode(req.query.token); // Can be used after the token is validated on the jwt.verify(req.query.token, 'secret', fn)
     User.findById(decoded.user._id, function(err, user){
       if(err) {
         return res.status(500).json({
@@ -56,7 +57,7 @@ router.post('/', function (req, res, next){
             error: err
           });
         }
-        user.messages.push(result._id); // Adding message to the users array
+        user.messages.push(result); // Adding message to the users array
         user.save();
         res.status(201).json({
           message: 'Saved Message',
@@ -69,6 +70,7 @@ router.post('/', function (req, res, next){
 
 /* update just the field changed 'content' from message */
 router.patch('/:id', function(req, res, next) {
+  var decoded = jwt.decode(req.query.token); // Can be used after the token is validated on the jwt.verify(req.query.token, 'secret', fn)
   Message.findById(req.params.id, function(err, message) {
     if(err) {
       return res.status(500).json({
@@ -81,6 +83,12 @@ router.patch('/:id', function(req, res, next) {
         title: 'No message Found!',
         error: {message: 'Message not found'}
       });
+    }
+    if(message.user != decoded.user._id) {
+        return res.status(401).json({
+          title: 'Not Authenticated',
+          error: {message: 'Users do not match'}
+        })
     }
     message.content = req.body.content;
     message.save(function(err, result){
@@ -99,6 +107,7 @@ router.patch('/:id', function(req, res, next) {
 })
 
 router.delete('/:id', function(req, res, next){
+  var decoded = jwt.decode(req.query.token); // Can be used after the token is validated on the jwt.verify(req.query.token, 'secret', fn)
   Message.findById(req.params.id, function(err, message) {
     if(err) {
       return res.status(500).json({
@@ -111,6 +120,12 @@ router.delete('/:id', function(req, res, next){
         title: 'No message Found!',
         error: {message: 'Message not found'}
       });
+    }
+    if(message.user != decoded.user._id) {
+      return res.status(401).json({
+        title: 'Not Authenticated',
+        error: {message: 'Users do not match'}
+      })
     }
     message.remove(function(err, result){
       if(err) {
