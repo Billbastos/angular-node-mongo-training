@@ -3,13 +3,14 @@ import { Injectable, Output, EventEmitter } from "@angular/core";
 import { Message } from "./message.model";
 import 'rxjs/Rx';
 import { Observable } from "rxjs";
+import { ErrorService } from "../errors/error.service";
 
 @Injectable() // enable Http Service to be injected in the constructor
 export class MessageService {
   private messages: Message[] = [];
   @Output() messageIsEdit = new EventEmitter<Message>();
 
-  constructor(private http: Http){}
+  constructor(private http: Http, private errorService: ErrorService){}
 
   addMessage(message: Message) {
     const body = JSON.stringify(message);
@@ -28,7 +29,10 @@ export class MessageService {
           this.messages.push(message);
           return message;
         })
-        .catch((error: Response) => Observable.throw(error));
+        .catch((error: Response) => {
+          this.errorService.handleError(error.json());
+          return Observable.throw(error);
+        });
   }
 
   editMessage(message: Message) {
@@ -41,7 +45,10 @@ export class MessageService {
     const token = localStorage.getItem('token') ? '?token='+localStorage.getItem('token') : '';
     return this.http.patch('http://localhost:3000/message/' + message.messageId + token, body, {headers: headers})
         .map((response: Response) => response.json())
-        .catch((error: Response) => Observable.throw(error));
+        .catch((error: Response) => {
+          this.errorService.handleError(error.json());
+          return Observable.throw(error);
+        });
   }
 
   getMessages() {
@@ -60,7 +67,10 @@ export class MessageService {
         this.messages = transformedMessages;
         return transformedMessages;
       })
-      .catch((error: Response) => Observable.throw(error))
+      .catch((error: Response) => {
+        this.errorService.handleError(error.json());
+        return Observable.throw(error);
+      })
   }
 
   deteleMessage(message: Message) {
@@ -71,6 +81,9 @@ export class MessageService {
           this.messages.splice(this.messages.indexOf(message), 1);
           return response.json();
         })
-        .catch((error: Response)=> Observable.throw(error));
+        .catch((error: Response)=> {
+          this.errorService.handleError(error.json());
+          return Observable.throw(error);
+        });
   }
 }

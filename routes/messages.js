@@ -59,7 +59,7 @@ router.post('/', function (req, res, next){
         }
         user.messages.push(result); // Adding message to the users array
         user.save();
-        result.user = user;
+        result.user = user; // adding user into the result
         res.status(201).json({
           message: 'Saved Message',
           obj: result
