@@ -3,8 +3,11 @@
 # Dependencies
 
 npm install --save mongoose
+
 npm install --save mongoose-unique-validator
+
 npm install --save bcryptjs
+
 npm install --save jsonwebtoken
 
 # Start MongoDB
