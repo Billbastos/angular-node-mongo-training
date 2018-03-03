@@ -8,6 +8,8 @@ import { MessageListComponent } from './message-list.component';
 import { MessageComponent } from './message.component';
 import { MessageService } from './message.service';
 
+// To dive deep into Angular2 Modules go to https://angular.io/guide/ngmodules
+
 @NgModule({
   declarations: [
     MessagesComponent,
@@ -24,3 +26,5 @@ import { MessageService } from './message.service';
 export class MessageModule {
 
 }
+
+
