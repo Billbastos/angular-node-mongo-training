@@ -25,3 +25,8 @@ npm run build
 # Build for production
 
 npm run build:prod
+
+# Out sources
+
+- MongoDB: mlab.com
+- Deploying app: heroku.com

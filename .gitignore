@@ -1,5 +1,5 @@
-/node_modules
+#/node_modules
 /.idea
-/typings
-/public/js/
+#/typings
+#/public/js/
 npm-debug.log

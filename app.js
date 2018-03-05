@@ -11,7 +11,7 @@ var messageRoutes = require('./routes/messages');
 var userRoutes = require('./routes/user');
 
 var app = express();
-mongoose.connect('mongodb://localhost:27017/node-angular');
+mongoose.connect('mongodb://adminuser:123456@ds257848.mlab.com:57848/gui-angula2-udemy');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
