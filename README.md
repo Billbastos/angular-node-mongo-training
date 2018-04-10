@@ -66,18 +66,18 @@ npm run build:prod
   - Setup webpack workflow creating some new files in the root folder called `webpack.config.common.js`, `webpack.config.dev.js`, and `webpack.config.prod.js`.
   - Setup folders for Angular 2 application creating the assets/app folders in the root and adding some files like: `app.component.ts`, `app.component.html`, `app.component.ts`, `app.module.ts`, `main.ts`, `polyfills.ts`
   - Setup the package.json adding scripts to build and run the application in dev mode like:
-  ```
-  "scripts": {
-    "start": "node ./bin/www",
-    "build": "del public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch"
-  }
-  ```
-  on the console, type `npm run build`.
+    ```
+      "scripts": {
+        "start": "node ./bin/www",
+        "build": "del public/js/app && webpack --config webpack.config.dev.js --progress --profile --watch"
+      }
+    ```
+  - On the console, type `npm run build`.
   - Configuring prod env creating and configuring a `tsconfig.aot.json` file, setup the `webpack.config.prod.js` file, and create the `main.aot.ts` on  assets/app folder.
   - Add the production script on `package.json` below "build" property
-  ```
-    "build:prod": "del public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*chunck.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
-  ```
+    ```
+      "build:prod": "del public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*chunck.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
+    ```
   - run `npm run build:prod`
   - See more at `custom-seed-project.zip`
 
