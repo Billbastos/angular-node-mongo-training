@@ -79,6 +79,7 @@ npm run build:prod
     "build:prod": "del public/js/app && ngc -p tsconfig.aot.json && ngc -p tsconfig.aot.json && webpack --config webpack.config.prod.js --progress --profile --bail && del 'public/js/app/**/*.js' 'public/js/app/**/*.js.map' '!public/js/app/bundle.js' '!public/js/app/*chunck.js' 'assets/app/**/*.ngfactory.ts' 'assets/app/**/*.shim.ts'"
   ```
   - run `npm run build:prod`
+  - See more at `custom-seed-project.zip`
 
 
 
